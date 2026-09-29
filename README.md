@@ -17,6 +17,7 @@ npm start            # → http://localhost:4000
 | `/conway` | automaton-conway — Game of Life |
 | `/bots`   | conway-automoton-survivalbots — bot ecology |
 | `/clips`  | paperclip-maximizer — idle game |
+| `/jarvis` | jarvis-landing — voice OS assistant landing page |
 
 The landing page shows live health (probed 🟢/🟡/🔴). `Ctrl-C` stops
 everything cleanly.
