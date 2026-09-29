@@ -11,6 +11,7 @@
  *   http://localhost:4000/conway/        → automaton-conway       :3003
  *   http://localhost:4000/bots/          → conway-automoton-survivalbots :3004
  *   http://localhost:4000/clips/         → paperclip-maximizer    :3005
+ *   http://localhost:4000/jarvis/        → jarvis-landing         :3006
  */
 const http = require('node:http');
 const { spawn } = require('node:child_process');
@@ -27,6 +28,7 @@ const APPS = [
   { mount: 'conway', dir: 'automaton-conway',               port: 3003, name: 'Conway Life',        desc: "Conway's Game of Life" },
   { mount: 'bots',   dir: 'conway-automoton-survivalbots',  port: 3004, name: 'Survival Bots',      desc: 'automaton predator-prey ecology' },
   { mount: 'clips',  dir: 'paperclip-maximizer',            port: 3005, name: 'Paperclip Maximizer', desc: 'the idle game about putting everything into clips' },
+  { mount: 'jarvis', dir: 'jarvis-landing',                port: 3006, name: 'JARVIS',             desc: 'landing page for the voice OS assistant' },
 ];
 
 const children = new Map();
