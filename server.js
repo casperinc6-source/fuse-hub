@@ -118,6 +118,10 @@ const server = http.createServer((req, res) => {
     return proxy(req, res, app);
   }
   if (urlPath === '/' || urlPath === '/index.html') return landing(res);
+  if (urlPath === '/healthz') {
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    return res.end(JSON.stringify({ ok: true, uptime_s: Math.round(process.uptime()), apps: APPS.length }));
+  }
   res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
   res.end('<h1 style="font-family:system-ui">404 — unknown mount</h1>');
 });
