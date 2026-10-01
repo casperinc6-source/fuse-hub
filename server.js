@@ -12,6 +12,7 @@
  *   http://localhost:4000/bots/          → conway-automoton-survivalbots :3004
  *   http://localhost:4000/clips/         → paperclip-maximizer    :3005
  *   http://localhost:4000/jarvis/        → jarvis-landing         :3006
+ *   http://localhost:4000/claims/        → claim-finder           :3007
  */
 const http = require('node:http');
 const { spawn } = require('node:child_process');
@@ -29,6 +30,7 @@ const APPS = [
   { mount: 'bots',   dir: 'conway-automoton-survivalbots',  port: 3004, name: 'Survival Bots',      desc: 'automaton predator-prey ecology' },
   { mount: 'clips',  dir: 'paperclip-maximizer',            port: 3005, name: 'Paperclip Maximizer', desc: 'the idle game about putting everything into clips' },
   { mount: 'jarvis', dir: 'jarvis-landing',                port: 3006, name: 'JARVIS',             desc: 'landing page for the voice OS assistant' },
+  { mount: 'claims', dir: 'claim-finder',                  port: 3007, name: 'ClaimFinder',        desc: 'official unclaimed money directory + auctions + claim tracker' },
 ];
 
 const children = new Map();
@@ -96,15 +98,19 @@ h1 b{color:#7ee787}table{width:100%;border-collapse:collapse;margin-top:1.2rem}
 td,th{padding:.6rem .7rem;border-bottom:1px solid #26303a;text-align:left;font-size:.95rem}
 a{color:#79c0ff}code{background:#1b2330;padding:.1rem .4rem;border-radius:4px}
 p{color:#8b98a5;font-size:.9rem}</style></head><body>
-<h1>fuse-<b>hub</b> — six apps, one command</h1>
+<h1>fuse-<b>hub</b> — ${APPS.length} apps, one command</h1>
 <p>All apps run as child processes with auto-restart. Refresh to update health.</p>
 <table><tr><th></th><th>App</th><th>What</th><th>Mount</th></tr>${rows}</table>
 <p style="margin-top:1.5rem">Health probes: 🟢 up · 🟡 starting · 🔴 down</p>
 </body></html>`);
 }
 
+process.on('uncaughtException', (err) => log('uncaught: ' + err.message));
+
 const server = http.createServer((req, res) => {
-  const urlPath = new URL(req.url, 'http://x').pathname;
+  let urlPath;
+  try { urlPath = new URL(req.url, 'http://x').pathname; }
+  catch { res.writeHead(400, { 'Content-Type': 'text/html; charset=utf-8' }); return res.end('<h1 style="font-family:system-ui">400 — bad request URL</h1>'); }
   const seg = urlPath.split('/')[1] || '';
   const app = APPS.find((a) => a.mount === seg);
   if (app) {
